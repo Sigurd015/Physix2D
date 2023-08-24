@@ -9,21 +9,46 @@ namespace Physix2D
 		Vec2 Max = { 0.0f, 0.0f };
 	};
 
-	struct Collider
+	enum class ShapeType
 	{
-		Vec2 Offset = { 0.0f, 0.0f };
-		Vec2 Center = { 0.0f, 0.0f };
-		AABB AABB;
+		Box, Circle
 	};
 
-	struct BoxCollider :public Collider
+	// Forward declaration
+	class Rigidbody2D;
+
+	class Collider
 	{
+	public:
+		Vec2 Offset = { 0.0f, 0.0f };
+		AABB AABB;
+
+		bool IsTrigger = false;
+
+		Rigidbody2D* Body = nullptr;
+
+		virtual ShapeType GetShapeType() = 0;
+		virtual void Update() = 0;
+	};
+
+	class BoxCollider :public Collider
+	{
+	public:
 		Vec2 Size = { 0.0f, 0.0f };
 		Vec2 Vertices[4] = { { 0.0f, 0.0f }, { 0.0f, 0.0f },{ 0.0f, 0.0f }, { 0.0f, 0.0f } };
+
+		void Update() override;
+
+		ShapeType GetShapeType() override { return ShapeType::Box; }
 	};
 
-	struct CircleCollider :public Collider
+	class CircleCollider :public Collider
 	{
+	public:
 		float Radius = 0.0f;
+
+		void Update() override;
+
+		ShapeType GetShapeType() override { return ShapeType::Circle; }
 	};
 }
