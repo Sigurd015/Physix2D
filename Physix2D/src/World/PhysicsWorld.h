@@ -20,8 +20,9 @@ namespace Physix2D
 
 		void Step(float timeStep, uint32_t iterations);
 
-		Rigidbody2D* CreateBody(const RigidBody2DSpecification& spec);
-		static Vec2 GetGravity() { return s_Gravity; }
+		Rigidbody2D* CreateBody(const Rigidbody2DSpecification& spec);
+
+		static Vec2 GetGravity();
 	private:
 		struct ContactPair
 		{
@@ -31,10 +32,11 @@ namespace Physix2D
 		std::vector<ContactPair> m_ContactPairs;
 		std::vector<Rigidbody2D> m_Bodies;
 
+		Collisions::ContactParams m_ContactParams;
+
 		void BroadPhase();
 		void NarrowPhase();
+		bool Collide(Rigidbody2D& body1, Rigidbody2D& body2, Collisions::ContactParams& contactParams);
 		void ResolveCollision(Rigidbody2D& body1, Rigidbody2D& body2, Collisions::ContactParams& contactParams);
-
-		static Vec2 s_Gravity;
 	};
 }

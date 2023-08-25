@@ -16,7 +16,7 @@ namespace Physix2D
 
 		for (size_t i = 0; i < 4; i++)
 		{
-			Vertices[i] = Vertices[i].Rotation(Body->m_Angle);
+			Vertices[i] = Vertices[i].Rotate(position, Body->m_Angle);
 
 			if (Vertices[i].x < AABB.Min.x)
 				AABB.Min.x = Vertices[i].x;
@@ -28,6 +28,8 @@ namespace Physix2D
 			else if (Vertices[i].y > AABB.Max.y)
 				AABB.Max.y = Vertices[i].y;
 		}
+
+		Body->m_UpdateRequired = false;
 	}
 
 	void CircleCollider::Update()
@@ -37,5 +39,7 @@ namespace Physix2D
 		AABB.Min.y = position.y - Radius;
 		AABB.Max.x = position.x + Radius;
 		AABB.Max.y = position.y + Radius;
+
+		Body->m_UpdateRequired = false;
 	}
 }

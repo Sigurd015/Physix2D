@@ -73,7 +73,7 @@ namespace Physix2D
 
 		float Length() const
 		{
-			return sqrtf(x * x + y * y);
+			return sqrtf(LengthSquared());
 		}
 
 		float LengthSquared() const
@@ -92,18 +92,19 @@ namespace Physix2D
 			return x * other.x + y * other.y;
 		}
 
-		Vec2 Project(const Vec2& other) const
+		float Cross(const Vec2& other) const
 		{
-			float scalar = Dot(other) / LengthSquared();
-			return Vec2(x * scalar, y * scalar);
+			return x * other.y - y * other.x;
 		}
 
-		Vec2 Reflect(const Vec2& normal) const
+		Vec2 Rotate(const Vec2& pivot, float angle) const
 		{
-			return *this + normal * (2.0f * Dot(normal));
+			Vec2 origin = *this - pivot;
+			Vec2 rotated = origin.Rotate(angle);
+			return rotated + pivot;
 		}
 
-		Vec2 Rotation(float angle) const
+		Vec2 Rotate(float angle) const
 		{
 			float cosAngle = cosf(angle);
 			float sinAngle = sinf(angle);
@@ -123,6 +124,11 @@ namespace Physix2D
 		static float Dot(const Vec2& a, const Vec2& b)
 		{
 			return a.Dot(b);
+		}
+
+		static float Cross(const Vec2& a, const Vec2& b)
+		{
+			return a.Cross(b);
 		}
 
 		static float DistanceSquared(const Vec2& a, const Vec2& b)

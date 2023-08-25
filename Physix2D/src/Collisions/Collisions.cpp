@@ -69,38 +69,22 @@ namespace Physix2D
 		}
 	}
 
-	bool Collisions::IntersectCircles(const CircleCollider& circleA, const CircleCollider& circleB, ContactParams& contactParams)
+	bool Collisions::IntersectCircles(const Vec2& circleCenter1, float circleRadius1,
+		const Vec2& circleCenter2, float circleRadius2, ContactParams& contactParams)
 	{
-		Vec2 center1 = circleA.Body->m_Position;
-		Vec2 center2 = circleB.Body->m_Position;
-		float distence = Vec2::Distance(center1, center2);
-		float sumRadius = circleA.Radius + circleB.Radius;
+		float distence = Vec2::Distance(circleCenter1, circleCenter2);
+		float sumRadius = circleRadius1 + circleRadius2;
 
 		if (distence > sumRadius)
 			return false;
 
-		Vec2 dir = Vec2::Normalize(center2 - center1);
+		Vec2 dir = Vec2::Normalize(circleCenter2 - circleCenter1);
 		contactParams.Normal = dir;
 		contactParams.Depth = sumRadius - distence;
-		contactParams.ContactPoints.push_back(center1 + (dir * circleA.Radius));
+		contactParams.ContactPoints.push_back(circleCenter1 + (dir * circleRadius1));
 		contactParams.ContactPointsCount = 1;
 
 		return true;
-	}
-
-	bool Collisions::IntersectBoxs(const BoxCollider& boxA, const BoxCollider& boxB, ContactParams& contactParams)
-	{
-		for (size_t i = 0; i < 2; i++)
-		{
-			contactParams.ContactPoints.push_back(Vec2());
-		}
-		return IntersectPolygons(boxA.Vertices, 4, boxA.Body->m_Position, boxB.Vertices, 4, boxB.Body->m_Position, contactParams);
-	}
-
-	bool Collisions::IntersectCirclePolygon(const CircleCollider& circleA, const BoxCollider& boxB, ContactParams& contactParams)
-	{
-		contactParams.ContactPoints.push_back(Vec2());
-		return IntersectCirclePolygon(circleA.Body->m_Position, circleA.Radius, boxB.Body->m_Position, boxB.Vertices, 4, contactParams);
 	}
 
 	bool Collisions::IntersectAABB(const AABB& aabbA, const AABB& aabbB)
@@ -114,8 +98,8 @@ namespace Physix2D
 		return true;
 	}
 
-	bool Collisions::IntersectPolygons(const Vec2* vertices1, uint32_t count1, const Vec2& center1,
-		const Vec2* vertices2, uint32_t count2, const Vec2& center2, ContactParams& contactParams)
+	bool Collisions::IntersectPolygons(const Vec2& center1, const Vec2* vertices1, uint32_t count1,
+		const Vec2& center2, const Vec2* vertices2, uint32_t count2, ContactParams& contactParams)
 	{
 		{
 			for (size_t i = 0; i < count1; i++)
@@ -262,7 +246,8 @@ namespace Physix2D
 		return true;
 	}
 
-	void Collisions::FindPolygonsContactPoints(const Vec2* vertices1, uint32_t count1, const Vec2* vertices2, uint32_t count2, ContactParams& contactParams)
+	void Collisions::FindPolygonsContactPoints(const Vec2* vertices1, uint32_t count1,
+		const Vec2* vertices2, uint32_t count2, ContactParams& contactParams)
 	{
 		float minDistSq = FLT_MAX;
 
