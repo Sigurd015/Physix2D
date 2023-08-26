@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Collisions.h"
 #include "Rigidbody/Rigidbody.h"
 
@@ -81,7 +82,7 @@ namespace Physix2D
 		Vec2 dir = Vec2::Normalize(circleCenter2 - circleCenter1);
 		contactParams.Normal = dir;
 		contactParams.Depth = sumRadius - distence;
-		contactParams.ContactPoints.push_back(circleCenter1 + (dir * circleRadius1));
+		contactParams.ContactPoints[0] = circleCenter1 + (dir * circleRadius1);
 		contactParams.ContactPointsCount = 1;
 
 		return true;

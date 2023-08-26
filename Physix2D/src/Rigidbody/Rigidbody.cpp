@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Rigidbody.h"
 #include "World/PhysicsWorld.h"
 
@@ -8,12 +9,6 @@ namespace Physix2D
 	Rigidbody2D::Rigidbody2D(const Rigidbody2DSpecification& spec) :m_Type(spec.Type), m_Position(spec.Position), m_Angle(spec.Angle),
 		m_FixedRotation(spec.FixedRotation), m_Entity(spec.Entity), m_GravityScale(spec.GravityScale), m_Enabled(spec.Enabled), m_UpdateRequired(true)
 	{}
-
-	Rigidbody2D::~Rigidbody2D()
-	{
-		//if (m_Collider != nullptr)
-		//	delete m_Collider;
-	}
 
 	void Rigidbody2D::Step(float timeStep)
 	{
@@ -57,7 +52,7 @@ namespace Physix2D
 		case ShapeType::Circle:
 		{
 			CircleCollider* srcCollider = static_cast<CircleCollider*>(spec.Collider);
-			CircleCollider* circleCollider = new CircleCollider();
+			Ref<CircleCollider> circleCollider = CreateRef<CircleCollider>();
 			circleCollider->Offset = srcCollider->Offset;
 			circleCollider->IsTrigger = srcCollider->IsTrigger;
 			circleCollider->Radius = srcCollider->Radius;
@@ -69,7 +64,7 @@ namespace Physix2D
 		case ShapeType::Box:
 		{
 			BoxCollider* srcCollider = static_cast<BoxCollider*>(spec.Collider);
-			BoxCollider* boxCollider = new BoxCollider();
+			Ref<BoxCollider> boxCollider = CreateRef<BoxCollider>();
 			boxCollider->Offset = srcCollider->Offset;
 			boxCollider->IsTrigger = srcCollider->IsTrigger;
 			boxCollider->Size = srcCollider->Size;
@@ -89,6 +84,6 @@ namespace Physix2D
 		else
 			m_InvMass = 1.0f / m_Mass;
 
-		return m_Collider;
+		return m_Collider.get();
 	}
 }

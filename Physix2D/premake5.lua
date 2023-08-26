@@ -2,10 +2,13 @@ project "Physix2D"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "on"
+	staticruntime "off"
 	
 	targetdir (outputdir .. "/%{prj.name}")
 	objdir (intdir .. "/%{prj.name}")
+
+	pchheader "pch.h"
+	pchsource "src/pch.cpp"
 
 	files
 	{
@@ -22,16 +25,9 @@ project "Physix2D"
 		systemversion "latest"
 		
 	filter "configurations:Debug"
-		defines "PHX_DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "PHX_RELEASE"	
-		runtime "Release"
-		optimize "on"
-
-	filter "configurations:Dist"
-		defines "PHX_DIST"
 		runtime "Release"
 		optimize "on"

@@ -1,6 +1,7 @@
 #pragma once
 #include "Math/Math.h"
 #include "Collider/Collider.h"
+#include "Utils/Ref.h"
 
 namespace Physix2D
 {
@@ -37,7 +38,7 @@ namespace Physix2D
 	{
 	public:
 		Rigidbody2D(const Rigidbody2DSpecification& spec);
-		~Rigidbody2D();
+		~Rigidbody2D() = default;
 
 		void SetGravityScale(float scale) { m_GravityScale = scale; }
 		void SetFixedRotation(bool fixed) { m_FixedRotation = fixed; }
@@ -62,6 +63,9 @@ namespace Physix2D
 		bool IsStatic() const { return m_Type == RigidbodyType::Static; }
 		bool IsDynamic() const { return m_Type == RigidbodyType::Dynamic; }
 		bool IsKinematic() const { return m_Type == RigidbodyType::Kinematic; }
+
+		template<typename T>
+		Ref<T> GetShape() const { return std::static_pointer_cast<T>(m_Collider); }
 	private:
 		void* m_Entity = nullptr;
 
@@ -89,7 +93,7 @@ namespace Physix2D
 		bool m_UpdateRequired = true;
 
 		RigidbodyType m_Type = RigidbodyType::Static;
-		Collider* m_Collider = nullptr;
+		Ref<Collider> m_Collider = nullptr;
 
 		friend class PhysicsWorld2D;
 		friend class BoxCollider;

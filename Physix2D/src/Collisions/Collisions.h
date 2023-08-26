@@ -3,7 +3,9 @@
 #include "Collider/Collider.h"
 
 #include <cstdint>
-#include <vector>
+#include <array>
+
+#define MAX_CONTACT_POINTS 2
 
 namespace Physix2D
 {
@@ -15,7 +17,7 @@ namespace Physix2D
 			Vec2 Normal = Vec2();
 			float Depth = FLT_MAX;
 			uint32_t ContactPointsCount = 0;
-			std::vector<Vec2> ContactPoints;
+			std::array<Vec2, MAX_CONTACT_POINTS> ContactPoints;
 		};
 		static bool IntersectCircles(const Vec2& circleCenter1, float circleRadius1,
 			const Vec2& circleCenter2, float circleRadius2, ContactParams& contactParams);
